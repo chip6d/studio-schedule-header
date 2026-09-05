@@ -55,19 +55,19 @@
   .hour-mark { position: absolute; top: 4px; font-size: 10px; color: #9CA3AF; transform: translateX(-50%); }
   .start-mark { position: absolute; top: 4px; left: 4px; font-size: 10px; color: #9CA3AF; }
 
-  /* 事件块：飞书风格 浅色背景+深色文字+左侧色条 */
+  /* 事件块：实心色块 */
   .block {
     position: absolute; top: 10px; bottom: 10px;
-    border-radius: 6px; padding: 6px 10px 6px 12px;
+    border-radius: 6px; padding: 6px 10px;
     display: flex; flex-direction: column; justify-content: center;
-    overflow: hidden; border-left: 4px solid;
+    overflow: hidden; border: 1px solid rgba(0,0,0,.12);
   }
   .block .b-title { font-size: 12.5px; font-weight: 600; line-height: 1.3; }
-  .block .b-time { font-size: 11px; opacity: .75; margin-top: 2px; font-variant-numeric: tabular-nums; }
-  .block .b-owner { font-size: 10px; opacity: .65; margin-top: 1px; }
-  .c-A { border-left-color: #F76964; background: rgba(247,105,100,.10); color: #B8443F; }
-  .c-B { border-left-color: #00D6B9; background: rgba(0,214,185,.10); color: #007A6A; }
-  .c-E { border-left-color: #8F959E; background: rgba(143,149,158,.12); color: #555A61; }
+  .block .b-time { font-size: 11px; opacity: .85; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .block .b-owner { font-size: 10px; opacity: .8; margin-top: 1px; }
+  .c-A { background: #F76964; color: #fff; }
+  .c-B { background: #00D6B9; color: #004D44; }
+  .c-E { background: #8F959E; color: #fff; }
   .blur { filter: blur(3.5px); user-select: none; -webkit-user-select: none; }
 
   .now-line {
