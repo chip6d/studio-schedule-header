@@ -13,13 +13,11 @@
   }
   .app { max-width: 1180px; margin: 0 auto; padding: 24px 28px 40px; }
 
-  /* 主卡片 */
   .card {
     background: #fff; border-radius: 14px; padding: 22px 28px 24px;
     box-shadow: 0 1px 3px rgba(0,0,0,.06);
   }
 
-  /* 卡片头部：品牌 + 日期导航 */
   .card-header {
     display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
@@ -34,18 +32,14 @@
   }
   .date-nav button:hover { background: #F3F4F6; }
   .date-nav button:disabled { opacity: .35; cursor: default; }
-  .date-display {
-    font-size: 22px; font-weight: 700; min-width: 190px; text-align: center;
-  }
+  .date-display { font-size: 22px; font-weight: 700; min-width: 190px; text-align: center; }
   .date-display .wd { font-size: 14px; color: #6B7280; font-weight: 400; margin-left: 8px; }
   .today-btn {
     height: 38px; padding: 0 16px; border: 1px solid #1A1B1C; background: #1A1B1C;
-    color: #fff; border-radius: 8px; font-size: 13px; cursor: pointer;
-    width: auto !important;
+    color: #fff; border-radius: 8px; font-size: 13px; cursor: pointer; width: auto !important;
   }
   .today-btn:hover { background: #374151; }
 
-  /* 泳道 */
   .lane { display: flex; margin-bottom: 14px; align-items: stretch; }
   .lane-label {
     width: 90px; flex: 0 0 90px; padding-right: 14px;
@@ -60,21 +54,22 @@
   .hour-line { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1px dashed #E5E7EB; }
   .hour-mark { position: absolute; top: 4px; font-size: 10px; color: #9CA3AF; transform: translateX(-50%); }
   .start-mark { position: absolute; top: 4px; left: 4px; font-size: 10px; color: #9CA3AF; }
+
+  /* 事件块：飞书风格 浅色背景+深色文字+左侧色条 */
   .block {
     position: absolute; top: 10px; bottom: 10px;
-    border-radius: 6px; color: #fff; padding: 6px 10px;
+    border-radius: 6px; padding: 6px 10px 6px 12px;
     display: flex; flex-direction: column; justify-content: center;
-    overflow: hidden; border: 1px solid rgba(0,0,0,.15);
+    overflow: hidden; border-left: 4px solid;
   }
   .block .b-title { font-size: 12.5px; font-weight: 600; line-height: 1.3; }
-  .block .b-time { font-size: 11px; opacity: .9; margin-top: 2px; font-variant-numeric: tabular-nums; }
-  .block .b-owner { font-size: 10px; opacity: .8; margin-top: 1px; }
-  .c-A { background: #3E6FA8; }
-  .c-B { background: #3E8E72; }
-  .c-E { background: #7D55A8; }
+  .block .b-time { font-size: 11px; opacity: .75; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .block .b-owner { font-size: 10px; opacity: .65; margin-top: 1px; }
+  .c-A { border-left-color: #F76964; background: rgba(247,105,100,.10); color: #B8443F; }
+  .c-B { border-left-color: #00D6B9; background: rgba(0,214,185,.10); color: #007A6A; }
+  .c-E { border-left-color: #8F959E; background: rgba(143,149,158,.12); color: #555A61; }
   .blur { filter: blur(3.5px); user-select: none; -webkit-user-select: none; }
 
-  /* 当前时间绿线 */
   .now-line {
     position: absolute; top: 0; bottom: 0; width: 0;
     border-left: 2px solid #22C55E; z-index: 5; pointer-events: none;
@@ -90,18 +85,17 @@
     white-space: nowrap; font-variant-numeric: tabular-nums;
   }
 
-  .empty-note {
-    text-align: center; color: #9CA3AF; font-size: 13px; padding: 20px 0;
-  }
+  .empty-note { text-align: center; color: #9CA3AF; font-size: 13px; padding: 20px 0; }
 
-  /* 明细 */
   .detail { margin-top: 22px; border-top: 1px solid #E5E7EB; padding-top: 16px; }
   .detail .d-title { font-size: 12px; font-weight: 700; color: #6B7280; margin-bottom: 10px; letter-spacing: 2px; }
   .detail table { width: 100%; border-collapse: collapse; font-size: 13px; }
   .detail th, .detail td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #F3F4F6; vertical-align: middle; }
   .detail th { color: #9CA3AF; font-weight: 600; font-size: 11px; letter-spacing: 1px; }
   .tag { display: inline-block; padding: 3px 10px; border-radius: 4px; color: #fff; font-size: 11px; font-weight: 700; }
-  .tag-A { background: #3E6FA8; } .tag-B { background: #3E8E72; } .tag-E { background: #7D55A8; }
+  .tag-A { background: #F76964; }
+  .tag-B { background: #00D6B9; color: #004D44; }
+  .tag-E { background: #8F959E; }
   .qr-cell { text-align: center; }
   .qr-cell svg { display: block; margin: 0 auto; }
   .qr-cell .qr-label { font-size: 10px; color: #9CA3AF; margin-top: 2px; }
@@ -132,9 +126,7 @@
         <button class="today-btn" id="todayBtn">今天</button>
       </div>
     </div>
-
     <div id="lanes"></div>
-
     <div class="detail">
       <div class="d-title">当日占用明细</div>
       <div style="overflow-x:auto;">
@@ -254,12 +246,10 @@ document.getElementById("todayBtn").addEventListener("click", goToday);
 
 goToday();
 
-// 每分钟：更新绿线位置 + 检查跨天
 setInterval(function() {
   var now = new Date();
   if (fmtDate(now) !== fmtDate(currentDate)) {
-    currentDate = now;
-    render();
+    currentDate = now; render();
   } else {
     updateNowLine();
   }
