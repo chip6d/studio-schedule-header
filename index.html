@@ -89,6 +89,12 @@
   .detail td.qr-cell { text-align: center; }
   .qr-cell svg { display: block; margin: 0 auto; }
   .qr-cell .qr-label { font-size: 10px; color: #9CA3AF; margin-top: 2px; text-align: center; }
+  .idle-stats { margin-top: 18px; border-top: 1px solid #E5E7EB; padding-top: 14px; }
+  .idle-cards { display: flex; gap: 12px; flex-wrap: wrap; }
+  .idle-card { flex: 1; min-width: 140px; padding: 14px 16px; border-radius: 8px; background: #F9FAFB; border: 1px solid #E5E7EB; }
+  .idle-card .ic-label { font-size: 12px; color: #6B7280; font-weight: 600; }
+  .idle-card .ic-value { font-size: 26px; font-weight: 700; margin-top: 6px; }
+  .idle-card .ic-unit { font-size: 13px; color: #9CA3AF; font-weight: 400; margin-left: 4px; }
   .footer { margin-top: 18px; font-size: 11px; color: #9CA3AF; text-align: right; }
   .live-dot { display: inline-block; width: 7px; height: 7px; background: #3E8E72; border-radius: 50%; margin-right: 5px; animation: pulse 2s infinite; }
   @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
@@ -127,6 +133,10 @@
           <tbody id="detailBody"></tbody>
         </table>
       </div>
+    </div>
+    <div class="idle-stats">
+      <div class="d-title">当日空闲时长</div>
+      <div id="idleStats" class="idle-cards"></div>
     </div>
     <div class="footer"><span class="live-dot"></span>自动同步当天 · 数据来源：飞书日历 · 时间轴 8:00–22:00</div>
   </div>
@@ -189,6 +199,19 @@ function render() {
         '<td class="qr-cell">' + qr + '<div class="qr-label">扫码联系 ' + e.owner + '</div></td></tr>';
     }).join("");
   }
+  // 当日空闲时长统计
+  var totalHours = (DAY_END - DAY_START) / 60;
+  var idleColors = {A:"#F76964", B:"#00A896", E:"#8F959E"};
+  var idleHtml = "";
+  studios.forEach(function(s) {
+    var busy = events.filter(function(e){ return e.studio === s.key; }).reduce(function(sum, e) {
+      return sum + (toMin(e.end) - toMin(e.start)) / 60;
+    }, 0);
+    var idle = totalHours - busy;
+    idleHtml += '<div class="idle-card"><div class="ic-label">' + s.name + '</div>' +
+      '<div class="ic-value" style="color:' + idleColors[s.key] + '">' + idle.toFixed(1) + '<span class="ic-unit">小时</span></div></div>';
+  });
+  document.getElementById("idleStats").innerHTML = idleHtml;
 }
 function updateNowLine() {
   if (fmtDate(currentDate) !== fmtDate(new Date())) return;
