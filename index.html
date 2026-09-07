@@ -297,8 +297,14 @@ setInterval(function() {
   }
   function updateStatusCells() {
     var now = new Date();
-    var nowMins = now.getHours() * 60 + now.getMinutes();
+    // 只在查看今天时显示状态，其他日期留空
+    var isViewingToday = currentDate.getFullYear() === now.getFullYear() && currentDate.getMonth() === now.getMonth() && currentDate.getDate() === now.getDate();
     var cells = document.querySelectorAll('.status-cell');
+    if (!isViewingToday) {
+      cells.forEach(function(cell) { cell.textContent = ''; cell.style.color = ''; });
+      return;
+    }
+    var nowMins = now.getHours() * 60 + now.getMinutes();
     cells.forEach(function(cell) {
       var s = cell.getAttribute('data-start');
       var e = cell.getAttribute('data-end');
