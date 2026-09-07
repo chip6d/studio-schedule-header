@@ -153,6 +153,7 @@
           <thead><tr>
             <th style="width:12%">工作室</th>
             <th style="width:14%">时间段</th>
+            <th style="width:14%">状态</th>
             <th>内容</th>
             <th style="width:10%">负责人</th>
             <th style="width:18%;text-align:center">飞书联系</th>
@@ -196,6 +197,7 @@ function nowLineHtml() {
   return '<div class="now-line" style="left:' + pct.toFixed(2) + '%"><span class="now-label">' + pad(now.getHours()) + ':' + pad(now.getMinutes()) + '</span></div>';
 }
 function render() {
+    setTimeout(updateStatusCells, 50);
   var key = fmtDate(currentDate);
   document.getElementById("dateText").textContent = currentDate.getFullYear() + "年" + (currentDate.getMonth()+1) + "月" + currentDate.getDate() + "日";
   document.getElementById("wdText").textContent = WEEKDAYS[currentDate.getDay()];
@@ -239,12 +241,12 @@ function render() {
 
   var tbody = document.getElementById("detailBody");
   if (events.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" class="empty-note">当日三个 Studio 均无安排</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="empty-note">当日三个 Studio 均无安排</td></tr>';
   } else {
     tbody.innerHTML = events.map(function(e) {
       var qr = QR[e.owner] || "";
       return '<tr><td><span class="tag tag-' + e.studio + '">' + (e.studio==="A"?"Studio A":e.studio==="B"?"Studio B":"Studio E") + '</span></td>' +
-        '<td>' + e.start + ' – ' + e.end + '</td><td class="blur">' + e.title + '</td><td>' + e.owner + '</td>' +
+        '<td>' + e.start + ' – ' + e.end + '</td><td class="status-cell" data-start="' + e.start + '" data-end="' + e.end + '"></td><td class="blur">' + e.title + '</td><td>' + e.owner + '</td>' +
         '<td class="qr-cell">' + qr + '<div class="qr-label">扫码联系 ' + e.owner + '</div></td></tr>';
     }).join("");
   }
@@ -263,6 +265,7 @@ function render() {
   document.getElementById("idleStats").innerHTML = idleHtml;
 }
 function updateNowLine() {
+    updateStatusCells();
   if (fmtDate(currentDate) !== fmtDate(new Date())) return;
   var html = nowLineHtml();
   document.querySelectorAll(".track").forEach(function(track) {
@@ -282,6 +285,47 @@ setInterval(function() {
   var now = new Date();
   if (fmtDate(now) !== fmtDate(currentDate)) { currentDate = now; render(); } else { updateNowLine(); }
 }, 60000);
+
+  // 状态列：计算每个事件与当前时间的关系
+  function formatDuration(mins) {
+    var abs = Math.abs(mins);
+    var h = Math.floor(abs / 60);
+    var m = Math.round(abs % 60);
+    if (h > 0 && m > 0) return h + 'h' + m + 'm';
+    if (h > 0) return h + 'h';
+    return m + 'm';
+  }
+  function updateStatusCells() {
+    var now = new Date();
+    var nowMins = now.getHours() * 60 + now.getMinutes();
+    var cells = document.querySelectorAll('.status-cell');
+    cells.forEach(function(cell) {
+      var s = cell.getAttribute('data-start');
+      var e = cell.getAttribute('data-end');
+      if (!s || !e) return;
+      var sm = parseInt(s.split(':')[0]) * 60 + parseInt(s.split(':')[1]);
+      var em = parseInt(e.split(':')[0]) * 60 + parseInt(e.split(':')[1]);
+      var text, color;
+      if (nowMins < sm) {
+        // 未开始：绿色倒计时
+        text = formatDuration(sm - nowMins) + ' 后开始';
+        color = '#059669';
+      } else if (nowMins < em) {
+        // 进行中：橙色剩余时间
+        text = '进行中 · 剩 ' + formatDuration(em - nowMins);
+        color = '#D97706';
+      } else {
+        // 已结束：红色正计时
+        text = '已结束 ' + formatDuration(nowMins - em);
+        color = '#DC2626';
+      }
+      cell.textContent = text;
+      cell.style.color = color;
+      cell.style.fontWeight = '600';
+      cell.style.fontSize = '12px';
+    });
+  }
+
 </script>
 </body>
 </html>
