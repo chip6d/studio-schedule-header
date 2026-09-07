@@ -66,13 +66,11 @@
   .c-E { background: #8F959E; color: #fff; }
   .blur { filter: blur(3.5px); user-select: none; -webkit-user-select: none; }
   .now-line {
-    position: absolute; top: 0; bottom: 0; width: 0;
-    border-left: 2px solid #22C55E; z-index: 5; pointer-events: none;
+    position: absolute; top: 0; bottom: 0; width: 2px;
+    background: #22C55E; z-index: 5; pointer-events: none;
+    transform: translateX(-50%);
   }
-  .now-line::before {
-    content: ""; position: absolute; top: -3px; left: 1px;
-    transform: translateX(-50%); width: 8px; height: 8px; border-radius: 50%; background: #22C55E;
-  }
+  .now-line::before { display: none; }
   .now-line .now-label {
     position: absolute; top: 2px; left: 6px;
     font-size: 10px; font-weight: 700; color: #16A34A;
