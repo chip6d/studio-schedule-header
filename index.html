@@ -116,9 +116,30 @@
     .date-display { font-size: 18px; min-width: 140px; }
     .detail { overflow-x: auto; } .detail table { min-width: 560px; }
   }
+
+  #passwordOverlay ~ * { display: none; }
+  body.unlocked #passwordOverlay { display: none; }
+  body.unlocked #passwordOverlay ~ * { display: block; }
+  #mainContent { display: none; }
 </style>
 </head>
 <body>
+<div id="passwordOverlay" style="position:fixed;top:0;left:0;right:0;bottom:0;background:#F3F4F6;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;">
+  <div style="text-align:center;">
+    <div style="font-size:20px;font-weight:700;color:#1F2937;margin-bottom:8px;letter-spacing:2px;">CASHMERE STUDIO</div>
+    <div style="font-size:13px;color:#9CA3AF;margin-bottom:32px;letter-spacing:1px;">ROOM SCHEDULE</div>
+    <input type="password" id="passwordInput" placeholder="请输入访问密码" 
+      style="width:240px;padding:12px 16px;font-size:14px;border:1px solid #D1D5DB;border-radius:8px;outline:none;text-align:center;"
+      onkeypress="if(event.key==='Enter')checkPassword()">
+    <div id="passwordError" style="color:#EF4444;font-size:12px;margin-top:8px;display:none;">密码错误，请重试</div>
+    <button onclick="checkPassword()" 
+      style="margin-top:16px;padding:10px 32px;font-size:14px;font-weight:600;color:#fff;background:#4F46E5;border:none;border-radius:8px;cursor:pointer;">
+      进入
+    </button>
+  </div>
+</div>
+<div id="mainContent">
+
 <div class="app">
   <div class="card">
     <div class="card-header">
@@ -334,6 +355,29 @@ setInterval(function() {
     });
   }
 
+
+
+  // 密码验证
+  var ACCESS_PASSWORD = "cashmere";
+  function checkPassword() {
+    var input = document.getElementById("passwordInput");
+    var error = document.getElementById("passwordError");
+    if (input.value === ACCESS_PASSWORD) {
+      localStorage.setItem("schedule_unlocked", "1");
+      document.getElementById("passwordOverlay").style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
+    } else {
+      error.style.display = "block";
+      input.value = "";
+      input.focus();
+    }
+  }
+  // 检查登录状态
+  if (localStorage.getItem("schedule_unlocked") === "1") {
+    document.getElementById("passwordOverlay").style.display = "none";
+    document.getElementById("mainContent").style.display = "block";
+  }
 </script>
+</div>
 </body>
 </html>
