@@ -297,7 +297,7 @@ function render() {
       var qr = QR[e.owner] || "";
       return '<tr><td><span class="tag tag-' + e.studio + '">' + (e.studio==="A"?"Studio A":e.studio==="B"?"Studio B":"Studio E") + '</span></td>' +
         '<td>' + e.start + ' – ' + e.end + '</td><td class="status-cell" data-start="' + e.start + '" data-end="' + e.end + '"></td><td class="blur">' + e.title + '</td><td>' + e.owner + '</td>' +
-        '<td class="qr-cell">' + qr + '<div class="qr-label">扫码联系 ' + e.owner + '</div>' + (OWNER_IDS[e.owner] ? '<a class="qr-link" href="https://applink.feishu.cn/client/chat/open?openId=' + OWNER_IDS[e.owner] + '" target="_blank">飞书联系</a>' : '') + '</td></tr>';
+        '<td class="qr-cell">' + qr + (OWNER_IDS[e.owner] ? '<a class="qr-link" href="https://applink.feishu.cn/client/chat/open?openId=' + OWNER_IDS[e.owner] + '" target="_blank">飞书联系 ' + e.owner + '</a>' : '<div class="qr-label">' + e.owner + '</div>') + '</td></tr>';
     }).join("");
   }
   // 当日空闲时长统计
