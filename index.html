@@ -380,6 +380,9 @@ setInterval(function() {
   }
 
 
+  // 初始化渲染
+  render();
+
   // 检查登录状态
   if (localStorage.getItem("schedule_unlocked") === "1") {
     document.getElementById("passwordOverlay").style.display = "none";
