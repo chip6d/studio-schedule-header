@@ -123,6 +123,28 @@
   body.unlocked #passwordOverlay ~ * { display: block; }
   #mainContent { display: none; }
 </style>
+<script>
+  var ACCESS_PASSWORD = "cashmere";
+  function checkPassword() {
+    var input = document.getElementById("passwordInput");
+    var error = document.getElementById("passwordError");
+    if (input.value === ACCESS_PASSWORD) {
+      localStorage.setItem("schedule_unlocked", "1");
+      document.getElementById("passwordOverlay").style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
+    } else {
+      error.style.display = "block";
+      input.value = "";
+      input.focus();
+    }
+  }
+  window.onload = function() {
+    if (localStorage.getItem("schedule_unlocked") === "1") {
+      document.getElementById("passwordOverlay").style.display = "none";
+      document.getElementById("mainContent").style.display = "block";
+    }
+  };
+</script>
 </head>
 <body>
 <div id="passwordOverlay" style="position:fixed;top:0;left:0;right:0;bottom:0;background:#F3F4F6;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;">
