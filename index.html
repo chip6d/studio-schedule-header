@@ -380,22 +380,6 @@ setInterval(function() {
   }
 
 
-
-  // 密码验证
-  var ACCESS_PASSWORD = "cashmere";
-  function checkPassword() {
-    var input = document.getElementById("passwordInput");
-    var error = document.getElementById("passwordError");
-    if (input.value === ACCESS_PASSWORD) {
-      localStorage.setItem("schedule_unlocked", "1");
-      document.getElementById("passwordOverlay").style.display = "none";
-      document.getElementById("mainContent").style.display = "block";
-    } else {
-      error.style.display = "block";
-      input.value = "";
-      input.focus();
-    }
-  }
   // 检查登录状态
   if (localStorage.getItem("schedule_unlocked") === "1") {
     document.getElementById("passwordOverlay").style.display = "none";
